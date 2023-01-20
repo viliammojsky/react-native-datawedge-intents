@@ -1,16 +1,24 @@
 /**
  * @providesModule DataWedgeIntents
  */
+import { NativeModules, Platform } from 'react-native';
 
-'use strict';
+export let DataWedgeIntents: object;
 
-var { Platform, NativeModules } = require('react-native');
+type ExtrasObject = {
+    action: string;
+    extras: object
+}
 
-if (Platform.OS === 'android')
-{
-    var RNDataWedgeIntents = NativeModules.DataWedgeIntents;
+type Filter = {
+    filterActions: string[];
+    filterCategories: string[]
+}
 
-    var DataWedgeIntents = {
+if (Platform.OS === 'android') {
+    const RNDataWedgeIntents = NativeModules.DataWedgeIntents;
+
+    DataWedgeIntents = {
         //  Specifying the DataWedge API constants in this module is deprecated.  It is not feasible to stay current with the DW API.
         ACTION_SOFTSCANTRIGGER: RNDataWedgeIntents.ACTION_SOFTSCANTRIGGER,
         ACTION_SCANNERINPUTPLUGIN: RNDataWedgeIntents.ACTION_SCANNERINPUTPLUGIN,
@@ -23,21 +31,23 @@ if (Platform.OS === 'android')
         TOGGLE_SCANNING: RNDataWedgeIntents.TOGGLE_SCANNING,
         ENABLE_PLUGIN: RNDataWedgeIntents.ENABLE_PLUGIN,
         DISABLE_PLUGIN: RNDataWedgeIntents.DISABLE_PLUGIN,
-
-        sendIntent(action, parameterValue) {
+    
+        sendIntent(action: string, parameterValue: string) {
             //  THIS METHOD IS DEPRECATED, use SendBroadcastWithExtras
             RNDataWedgeIntents.sendIntent(action, parameterValue);
         },
-        sendBroadcastWithExtras(extrasObject) {
+        sendBroadcastWithExtras(extrasObject: ExtrasObject) {
             RNDataWedgeIntents.sendBroadcastWithExtras(extrasObject);
         },
-        registerBroadcastReceiver(filter) {
+        registerBroadcastReceiver(filter: Filter) {
             RNDataWedgeIntents.registerBroadcastReceiver(filter);
         },
-        registerReceiver(action, category) {
+        registerReceiver(action: string, category: string) {
             //  THIS METHOD IS DEPRECATED, use registerBroadcastReceiver
             RNDataWedgeIntents.registerReceiver(action, category);
         },
     };
-    module.exports = DataWedgeIntents;
+    
+} else {
+    DataWedgeIntents = {};
 }
