@@ -3,7 +3,30 @@
  */
 import { NativeModules, Platform } from 'react-native';
 
-export let DataWedgeIntents: object;
+export let DataWedgeIntents: DataWedgeIntents;
+
+type DataWedgeIntents = {
+    ACTION_SOFTSCANTRIGGER: any;
+    ACTION_SCANNERINPUTPLUGIN: any;
+    ACTION_ENUMERATESCANNERS: any;
+    ACTION_SETDEFAULTPROFILE: any;
+    ACTION_RESETDEFAULTPROFILE: any;
+    ACTION_SWITCHTOPROFILE: any;
+    START_SCANNING: any;
+    STOP_SCANNING: any;
+    TOGGLE_SCANNING: any;
+    ENABLE_PLUGIN: any;
+    DISABLE_PLUGIN: any;
+    sendIntent: ({ action, parameterValue }: SendIntent) => void;
+    sendBroadcastWithExtras: ({action, extras}: ExtrasObject) => void;
+    registerBroadcastReceiver: ({filterActions, filterCategories}: Filter) => void;
+    registerReceiver: ({action, category}: RegisterReceiver) => void;
+}
+
+type SendIntent = {
+    action: string;
+    parameterValue: string
+}
 
 type ExtrasObject = {
     action: string;
@@ -13,6 +36,11 @@ type ExtrasObject = {
 type Filter = {
     filterActions: string[];
     filterCategories: string[]
+}
+
+type RegisterReceiver = {
+    action: string;
+    category: string
 }
 
 if (Platform.OS === 'android') {
@@ -32,7 +60,7 @@ if (Platform.OS === 'android') {
         ENABLE_PLUGIN: RNDataWedgeIntents.ENABLE_PLUGIN,
         DISABLE_PLUGIN: RNDataWedgeIntents.DISABLE_PLUGIN,
     
-        sendIntent(action: string, parameterValue: string) {
+        sendIntent({action, parameterValue}: SendIntent) {
             //  THIS METHOD IS DEPRECATED, use SendBroadcastWithExtras
             RNDataWedgeIntents.sendIntent(action, parameterValue);
         },
@@ -42,12 +70,10 @@ if (Platform.OS === 'android') {
         registerBroadcastReceiver(filter: Filter) {
             RNDataWedgeIntents.registerBroadcastReceiver(filter);
         },
-        registerReceiver(action: string, category: string) {
+        registerReceiver({action, category}: RegisterReceiver) {
             //  THIS METHOD IS DEPRECATED, use registerBroadcastReceiver
             RNDataWedgeIntents.registerReceiver(action, category);
         },
     };
     
-} else {
-    DataWedgeIntents = {};
 }
