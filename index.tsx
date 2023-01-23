@@ -30,7 +30,10 @@ type SendIntent = {
 
 type ExtrasObject = {
     action: string;
-    extras: object
+    extras: {
+        [x: string]: string | object;
+        ["SEND_RESULT"]: string;
+    }
 }
 
 type Filter = {
@@ -48,6 +51,7 @@ if (Platform.OS === 'android') {
 
     DataWedgeIntents = {
         //  Specifying the DataWedge API constants in this module is deprecated.  It is not feasible to stay current with the DW API.
+        // DEPRECATED
         ACTION_SOFTSCANTRIGGER: RNDataWedgeIntents.ACTION_SOFTSCANTRIGGER,
         ACTION_SCANNERINPUTPLUGIN: RNDataWedgeIntents.ACTION_SCANNERINPUTPLUGIN,
         ACTION_ENUMERATESCANNERS: RNDataWedgeIntents.ACTION_ENUMERATESCANNERS,
@@ -60,19 +64,21 @@ if (Platform.OS === 'android') {
         ENABLE_PLUGIN: RNDataWedgeIntents.ENABLE_PLUGIN,
         DISABLE_PLUGIN: RNDataWedgeIntents.DISABLE_PLUGIN,
     
+        //  THIS METHOD IS DEPRECATED, use SendBroadcastWithExtras
         sendIntent({action, parameterValue}: SendIntent) {
-            //  THIS METHOD IS DEPRECATED, use SendBroadcastWithExtras
             RNDataWedgeIntents.sendIntent(action, parameterValue);
         },
+        //  THIS METHOD IS DEPRECATED, use registerBroadcastReceiver
+        registerReceiver({action, category}: RegisterReceiver) {
+            RNDataWedgeIntents.registerReceiver(action, category);
+        },
+
+        // USE THESE
         sendBroadcastWithExtras(extrasObject: ExtrasObject) {
             RNDataWedgeIntents.sendBroadcastWithExtras(extrasObject);
         },
         registerBroadcastReceiver(filter: Filter) {
             RNDataWedgeIntents.registerBroadcastReceiver(filter);
-        },
-        registerReceiver({action, category}: RegisterReceiver) {
-            //  THIS METHOD IS DEPRECATED, use registerBroadcastReceiver
-            RNDataWedgeIntents.registerReceiver(action, category);
         },
     };
     
