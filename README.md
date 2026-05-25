@@ -90,3 +90,12 @@ Please also ensure you disable the keyboard output plugin to avoid undesired eff
 For more information about DataWedge and how to configure it please visit Zebra [tech docs](http://techdocs.zebra.com/).  The DataWedge API that this module calls is detailed [here](http://techdocs.zebra.com/datawedge/latest/guide/api/)
 
 
+## Contributions
+
+### Typescript
+- added type declarations for Typescript
+
+### Fixed Android 14+ (API 34) receiver explicit declaration
+- Android 14+ (API 34) requires explicit declaration of receiver visibility for security. When registering dynamic BroadcastReceivers, you must specify either RECEIVER_EXPORTED or RECEIVER_NOT_EXPORTED
+- added RECEIVER_NOT_EXPORTED to .registerReceiver
+
